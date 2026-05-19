@@ -1,11 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { MobileDrawer } from "../MobileDrawer";
-import { ThemeToggle } from "../ThemeToggle";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Nav.module.css";
@@ -39,9 +39,15 @@ export function Nav() {
   return (
     <>
       <nav className={styles.nav} aria-label="Principal">
-        <Link href="/" className={styles.brand}>
-          <span className={styles.dot} aria-hidden />
-          Byst.end
+        <Link href="/" className={styles.brand} aria-label="Byst.end — página inicial">
+          <Image
+            src="/logo.png"
+            alt="Byst.end"
+            width={163}
+            height={150}
+            priority
+            className={styles.logo}
+          />
         </Link>
 
         <div className={styles.links}>
@@ -59,8 +65,6 @@ export function Nav() {
         <Link href="/busca" className={styles.shortcut} title="Ir para busca">
           <kbd>Ctrl</kbd>+<kbd>K</kbd>
         </Link>
-
-        <ThemeToggle />
 
         <button
           type="button"

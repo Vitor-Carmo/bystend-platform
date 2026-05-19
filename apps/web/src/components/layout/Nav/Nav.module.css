@@ -13,27 +13,34 @@
 }
 
 .brand {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  font-weight: 700;
-  font-size: var(--text-lg);
-  color: var(--text-primary);
-  text-decoration: none;
   margin-right: auto;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: opacity var(--dur-fast);
 }
 
 .brand:hover {
-  color: var(--accent);
+  opacity: 0.85;
   text-decoration: none;
 }
 
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: ringPulse 2.5s ease infinite;
+.brand:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.logo {
+  width: auto;
+  height: 36px;
+  object-fit: contain;
+}
+
+@media (min-width: 900px) {
+  .logo {
+    height: 40px;
+  }
 }
 
 .links {

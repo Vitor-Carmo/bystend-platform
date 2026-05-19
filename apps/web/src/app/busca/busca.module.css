@@ -21,6 +21,13 @@
 }
 
 .searchInput {
+  height: 48px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-1);
+  color: var(--text);
+  font-size: var(--text-base);
+  width: 100%;
   padding-left: calc(var(--space-4) + 28px) !important;
 }
 
