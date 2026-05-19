@@ -59,6 +59,12 @@ export default async function HomePage() {
               Percorra as 8 camadas do processo evolutivo educacional da Byst.end.
             </p>
           </Link>
+          <Link href="/violentometro" className="card" style={{ textDecoration: "none", color: "inherit" }}>
+            <h3>Violentômetro</h3>
+            <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
+              Entenda a escalada da violência no trabalho, do cuidado inicial até situações graves.
+            </p>
+          </Link>
           <Link href="/chat" className="card" style={{ textDecoration: "none", color: "inherit" }}>
             <h3>Chat orientativo</h3>
             <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>

@@ -289,3 +289,110 @@ label {
   background: var(--accent);
   transition: width 0.3s;
 }
+
+/* Violentômetro — timeline vertical */
+.v-timeline {
+  position: relative;
+  padding-left: 2rem;
+  margin-top: 1.5rem;
+}
+
+.v-timeline::before {
+  content: "";
+  position: absolute;
+  left: 0.4375rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 2px;
+  background: var(--border);
+}
+
+.v-item {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.v-item:last-child {
+  margin-bottom: 0;
+}
+
+.v-dot {
+  position: absolute;
+  left: -1.625rem;
+  top: 1.25rem;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--border);
+  z-index: 1;
+}
+
+.v-card {
+  border-radius: var(--radius);
+  border-left: 4px solid;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.v-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.v-card--reaja .v-title {
+  font-weight: 700;
+  color: #fecaca;
+}
+
+.v-faixa-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
+}
+
+.v-title {
+  font-size: 1rem;
+  margin: 0.25rem 0 0.5rem;
+  line-height: 1.35;
+}
+
+.v-desc {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.v-exemplo,
+.v-rota {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.65rem;
+  line-height: 1.45;
+}
+
+.v-exemplo strong,
+.v-rota strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .v-timeline {
+    padding-left: 1.5rem;
+  }
+
+  .v-dot {
+    left: -1.375rem;
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .v-card {
+    padding: 0.85rem 1rem;
+  }
+}

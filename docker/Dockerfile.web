@@ -18,6 +18,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY package.json package-lock.json tsconfig.base.json ./
 COPY apps/web ./apps/web
 COPY packages/shared ./packages/shared
+COPY data/violentometro.ts ./data/violentometro.ts
 RUN npm run build -w @bystend/shared && npm run build -w @bystend/web
 
 FROM base AS runner
