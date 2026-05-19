@@ -1,7 +1,9 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
 import { z } from "zod";
 import { prisma } from "../lib/prisma.js";
+import { sessionIdSchema } from "../lib/session.js";
 import { handleChat } from "../services/chat.js";
+import { getProgressBySessionId, upsertProgressFields } from "../services/progress.js";
 import { searchContents } from "../services/search.js";
 
 export const router = Router();
@@ -187,6 +189,41 @@ router.get("/quiz", async (_req, res, next) => {
         relatedContent: q.content,
       }))
     );
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.get("/progress/:sessionId", async (req, res, next) => {
+  try {
+    const { sessionId } = z.object({ sessionId: sessionIdSchema }).parse({ sessionId: req.params.sessionId });
+    const progress = await getProgressBySessionId(sessionId);
+    res.json(progress);
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.post("/progress", async (req, res, next) => {
+  try {
+    const schema = z
+      .object({
+        sessionId: sessionIdSchema,
+        completedContentId: z.string().min(1).optional(),
+        completedLayerSlug: z.string().min(1).optional(),
+        pathId: z.string().min(1).optional(),
+      })
+      .refine(
+        (body) => Boolean(body.completedContentId ?? body.completedLayerSlug ?? body.pathId),
+        "Informe ao menos um campo de progresso para atualizar"
+      );
+    const body = schema.parse(req.body);
+    const progress = await upsertProgressFields(body.sessionId, {
+      completedContentId: body.completedContentId,
+      completedLayerSlug: body.completedLayerSlug,
+      pathId: body.pathId,
+    });
+    res.json(progress);
   } catch (e) {
     next(e);
   }

@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Disclaimer } from "@/components/Disclaimer";
 import { api, getSessionId } from "@/lib/api";
+import { fetchProgress, type UserProgressResponse } from "@/lib/progress";
 
 interface QuizQuestion {
   id: string;
@@ -16,11 +17,30 @@ export default function QuizPage() {
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<{ correct: boolean; explanation: string } | null>(null);
-  const [score, setScore] = useState(0);
+  const [runScore, setRunScore] = useState(0);
+  const [saved, setSaved] = useState<UserProgressResponse>({
+    quizScore: 0,
+    quizTotal: 0,
+    completedIds: [],
+    completedLayers: [],
+  });
+  const [loadingProgress, setLoadingProgress] = useState(true);
+
+  const loadProgress = useCallback(async () => {
+    try {
+      const progress = await fetchProgress();
+      setSaved(progress);
+    } catch {
+      /* API offline */
+    } finally {
+      setLoadingProgress(false);
+    }
+  }, []);
 
   useEffect(() => {
     api<QuizQuestion[]>("/quiz").then(setQuestions).catch(() => setQuestions([]));
-  }, []);
+    void loadProgress();
+  }, [loadProgress]);
 
   const current = questions[index];
 
@@ -37,7 +57,8 @@ export default function QuizPage() {
         }),
       });
       setFeedback(res);
-      if (res.correct) setScore((s) => s + 1);
+      if (res.correct) setRunScore((s) => s + 1);
+      await loadProgress();
     } catch {
       setFeedback({
         correct: false,
@@ -66,7 +87,10 @@ export default function QuizPage() {
       <>
         <h1>Quiz concluído</h1>
         <p>
-          Você acertou {score} de {questions.length}.
+          Você acertou {runScore} de {questions.length} nesta rodada.
+        </p>
+        <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
+          Histórico na sua sessão: {saved.quizScore} acertos em {saved.quizTotal} respostas registradas.
         </p>
         <Link href="/trilha" className="btn btn-primary" style={{ marginTop: "1rem", display: "inline-flex" }}>
           Voltar à trilha
@@ -78,9 +102,14 @@ export default function QuizPage() {
   return (
     <>
       <h1 style={{ marginBottom: "0.5rem" }}>Quiz: isso merece atenção?</h1>
-      <p style={{ color: "var(--muted)", marginBottom: "1rem" }}>
+      <p style={{ color: "var(--muted)", marginBottom: "0.5rem" }}>
         Pergunta {index + 1} de {questions.length}
       </p>
+      {!loadingProgress && saved.quizTotal > 0 && (
+        <p style={{ color: "var(--muted)", fontSize: "0.85rem", marginBottom: "1rem" }}>
+          Progresso salvo: {saved.quizScore} acertos em {saved.quizTotal} respostas anteriores.
+        </p>
+      )}
       <Disclaimer />
 
       <article className="card">

@@ -1,81 +1,228 @@
 # Byst.end — Plataforma Educacional MVP
 
-Plataforma digital para prevenção de assédio, transformando os materiais da Byst.end em uma experiência educativa, segura e interativa para colaboradores, lideranças e áreas de apoio.
+Plataforma digital para **prevenção de assédio e condutas inadequadas no trabalho**, transformando os materiais da Byst.end em uma experiência educativa, segura e interativa para colaboradores, lideranças e áreas de apoio.
 
-## Problema
+---
 
-Organizações precisam de uma forma acessível de educar sobre prevenção de assédio sem reduzir o tema a uma biblioteca estática de arquivos. Colaboradores precisam aprender, buscar orientação inicial e refletir sobre situações sensíveis com responsabilidade.
+## Objetivo da solução
+
+Oferecer um ambiente onde o usuário possa **aprender**, **buscar orientação inicial** e **refletir sobre situações sensíveis** com linguagem acolhedora e responsável — sem substituir RH, jurídico, compliance ou canais oficiais de denúncia.
+
+O MVP prioriza:
+
+- Conteúdos organizados por **8 camadas metodológicas**
+- **Busca inteligente** sobre a base educacional
+- **Trilha** e **quiz** com progresso persistido
+- **Chat orientativo** com RAG + Google Gemini, fontes citadas e disclaimers
+
+---
+
+## Metodologia Byst.end
+
+A plataforma estrutura a jornada educacional em **8 Camadas de Aprendizagem**, do reconhecimento básico à prevenção contínua:
+
+| # | Camada | Foco |
+|---|--------|------|
+| 1 | **Conhecimento Básico** | Fundamentos informativos sobre assédio e ambiente de trabalho saudável |
+| 2 | **Diferenciação de Limites** | Educação sobre limites, respeito e comunicação profissional |
+| 3 | **Reconhecimento de Condutas** | Identificação de comportamentos inadequados e microagressões |
+| 4 | **Impacto e Consequências** | Consciência sobre efeitos na saúde, carreira e cultura organizacional |
+| 5 | **Responsabilidades** | Papéis de liderança, RH, compliance e organização |
+| 6 | **Orientação à Vítima** | Acolhimento, registro seguro e busca de apoio |
+| 7 | **Papel das Testemunhas** | Ação coletiva e intervenção responsável |
+| 8 | **Prevenção Contínua** | Cultura de respeito, revisão de práticas e aprendizado permanente |
+
+Tom institucional, educativo e acolhedor em toda a experiência — **sem vereditos legais definitivos** nas interações com IA.
+
+---
 
 ## Funcionalidades
 
-- **Biblioteca**: vídeos, nano/microconteúdos, slogans e conteúdos sazonais com filtros por tema, camada, tipo e risco
-- **Busca inteligente**: busca textual com ranking e snippets (preparada para embeddings)
-- **Trilha educativa**: progressão pelas 8 camadas metodológicas
-- **Quiz**: perguntas com feedback educativo sem julgamento definitivo
-- **Chat orientativo**: respostas baseadas na base com fontes e disclaimers
-- **API documentada**: endpoints REST separados do frontend
+| Módulo | Descrição |
+|--------|-----------|
+| **Biblioteca** | Vídeos, nano/microconteúdos, slogans e sazonais com filtros por tema, camada, tipo e risco |
+| **Busca inteligente** | Busca textual ponderada com ranking e snippets (base preparada para embeddings) |
+| **Trilha educativa** | Percursos por camadas; etapas marcáveis como concluídas com progresso restaurado |
+| **Quiz** | Perguntas com feedback educativo; pontuação acumulada por sessão anônima |
+| **Chat orientativo** | RAG sobre a base Byst.end + Gemini; fontes citadas, disclaimer e alerta em temas sensíveis |
+| **API REST** | Backend Express documentado por rotas; validação Zod; Prisma + SQLite |
 
-## Stack
+### Persistência de Sessão Anônima no banco SQLite usando Prisma
 
-- Frontend: Next.js 15, React 19, TypeScript
-- Backend: Express 5, TypeScript
-- Banco: SQLite + Prisma
-- Monorepo: npm workspaces (`apps/web`, `apps/api`, `packages/shared`)
+O navegador guarda **apenas** um identificador anônimo (`bystend_session` no `localStorage`, formato UUID ou `anon-{uuid}`). **Todo o progresso real** fica no servidor:
 
-## Como rodar com Docker
+- Modelo `UserProgress` (Prisma): `quizScore`, `quizTotal`, `completedIds`, `completedLayers`
+- `GET /api/progress/:sessionId` — restaura progresso ao abrir Quiz ou Trilha
+- `POST /api/progress` — persiste conclusão de etapas da trilha
+- `POST /api/quiz/answer` — incrementa pontuação do quiz na mesma sessão
 
-Stack completa (API + Web + SQLite persistente) via Docker Compose.
+Assim, o usuário retoma a jornada após recarregar a página, sem login nem cadastro.
 
-### Pré-requisitos
+---
 
-- [Docker](https://docs.docker.com/get-docker/) e Docker Compose v2
-- CSVs da Byst.end na pasta `data/` (veja [`data/README.md`](data/README.md))
+## Jornada do usuário (visão geral)
 
-### Subir os containers
+```mermaid
+flowchart TD
+    subgraph client [Next.js 15 - apps/web]
+        Home[Início]
+        Biblioteca[Biblioteca]
+        Busca[Busca]
+        Trilha[Trilha]
+        Quiz[Quiz]
+        Chat[Chat]
+        Conteudo[Detalhe do conteúdo]
+    end
+
+    subgraph api [Express 5 - apps/api]
+        API[API REST /api]
+        SearchSvc[search.ts - busca textual]
+        RAG[rag-context.ts]
+        ChatSvc[chat.ts]
+        ProgressSvc[progress.ts]
+    end
+
+    subgraph data [Persistência]
+        Prisma[Prisma ORM]
+        SQLite[(SQLite)]
+    end
+
+    subgraph ai [IA]
+        Gemini[Google Gemini]
+        Base[Base de conhecimento Byst.end]
+    end
+
+    Home --> Biblioteca
+    Home --> Busca
+    Home --> Trilha
+    Home --> Chat
+
+    Biblioteca --> Conteudo
+    Busca --> API
+    API --> SearchSvc
+    SearchSvc --> Prisma
+    SearchSvc --> RAG
+
+    Trilha --> Quiz
+    Trilha --> API
+    Quiz --> API
+    API --> ProgressSvc
+    ProgressSvc --> Prisma
+
+    Chat --> API
+    API --> ChatSvc
+    ChatSvc --> RAG
+    RAG --> Base
+    ChatSvc --> Gemini
+    ChatSvc --> Prisma
+
+    Prisma --> SQLite
+```
+
+---
+
+## Novos Materiais e Base Legal
+
+A base de conhecimento e o contexto do RAG incorporam referências que **enriquecem a conscientização** e o alinhamento com boas práticas organizacionais:
+
+| Material | Papel na plataforma |
+|----------|---------------------|
+| **Convenção 190 da OIT** | Marco internacional sobre violência e assédio no mundo do trabalho; citado no contexto do chat quando relevante |
+| **Nova NR-1** | Gestão de riscos ocupacionais e deveres da organização em ambiente seguro |
+| **Think Eva** | Recortes de gênero e equidade para leitura sensível de situações |
+| **Violentômetro** | Escala educativa da progressão de condutas (`data/violentometro.ts`) — apoio à identificação precoce |
+
+Esses materiais **não substituem** parecer jurídico ou políticas internas; servem para **contextualizar** respostas educativas e materiais da biblioteca.
+
+---
+
+## Arquitetura
+
+Monorepo **npm workspaces** na raiz:
+
+```
+bystend-platform/
+├── apps/
+│   ├── web/          # Next.js 15 (App Router), React 19, porta 3000
+│   └── api/          # Express 5, porta 4000, prefixo /api
+├── packages/
+│   └── shared/       # Tipos e constantes compartilhados (Zod-friendly)
+├── prisma/
+│   └── schema.prisma # SQLite — Content, Layers, Quiz, UserProgress, Chat...
+└── data/             # CSVs, violentometro.ts, materiais de seed
+```
+
+| Camada | Responsabilidade |
+|--------|------------------|
+| **apps/web** | UI, chamadas `fetch` à API, `getSessionId()` (só UUID no browser) |
+| **apps/api** | Rotas REST, serviços (`chat`, `search`, `rag-context`, `progress`), seed |
+| **packages/shared** | `ChatResponse`, `LAYER_DEFINITIONS`, `CHAT_DISCLAIMER`, tipos de conteúdo |
+| **Prisma + SQLite** | Persistência única; `DATABASE_URL=file:./prisma/dev.db` (local) |
+
+Fluxo típico: **Browser → Next.js → Express `/api/*` → Prisma → SQLite**. Em Docker, o SSR do Next usa `API_INTERNAL_URL` para falar com o container da API.
+
+Documentação técnica detalhada: [`docs/architecture/`](docs/architecture/README.md).
+
+---
+
+## IA Responsável
+
+O chat orientativo foi desenhado para uso **educativo e cauteloso**:
+
+- **Não fornece parecer jurídico** nem conclusão definitiva de assédio
+- **Não substitui** RH, jurídico, compliance, canal de denúncia ou apoio psicológico
+- **Evita diagnósticos** e linguagem punitiva; prefere “pode conter sinais de conduta inadequada”
+- **Contexto controlado via RAG**: recuperação textual na base Byst.end antes da geração (Gemini)
+- **Disclaimer obrigatório** em toda resposta (`CHAT_DISCLAIMER` em `@bystend/shared`)
+- **Fontes citadas** na UI (badges com link para `/conteudo/:id`)
+- **Fallback empático** se `GEMINI_API_KEY` não estiver configurada ou o modelo falhar
+- **Alerta de tema sensível** (`highRisk`) quando conteúdos de alto risco jurídico entram no contexto
+
+---
+
+## Stack tecnológica
+
+| Área | Tecnologia |
+|------|------------|
+| Frontend | Next.js 15, React 19, TypeScript |
+| Backend | Express 5, TypeScript (NodeNext + sufixo `.js` nos imports) |
+| ORM / DB | Prisma 6, SQLite |
+| IA | Google Gemini (`@google/generative-ai`) + RAG textual |
+| Validação | Zod |
+| Monorepo | npm workspaces |
+| Deploy local | Docker Compose (API + Web + volume SQLite) |
+
+---
+
+## Como rodar
+
+### Com Docker (recomendado para demo)
+
+**Pré-requisitos:** Docker Compose v2, CSVs/materiais em `data/` ([`data/README.md`](data/README.md)).
 
 ```bash
 cd bystend-platform
 cp .env.docker.example .env
-# Ajuste GEMINI_API_KEY e confira CSV_HOST_PATH=./data com os CSVs dentro de data/
+# Configure GEMINI_API_KEY para o chat com IA
 docker compose --env-file .env up --build
 ```
-
-Coloque a planilha **`data/VÍDEOS, NANO E MICRO CONTEÚDOS EDUCATIVOS.xlsx`** (ou os CSVs exportados por aba) antes de subir. O seed roda automaticamente na primeira subida com banco vazio (`SEED_IF_EMPTY=true`, padrão). Use `SEED_ON_START=true` apenas para forçar um novo seed (apaga e recria tudo).
 
 | Serviço | URL |
 |---------|-----|
 | Web | http://localhost:3000 |
 | API health | http://localhost:4000/api/health |
 
-### Comandos úteis
-
 ```bash
-npm run docker:up      # equivalente a docker compose up --build
-npm run docker:down    # para os containers
-npm run docker:logs    # acompanha logs
+npm run docker:up      # docker compose up --build
+npm run docker:down
+npm run docker:logs
 ```
 
-### Variáveis Docker (`.env.docker.example`)
+Seed automático na primeira subida com banco vazio (`SEED_IF_EMPTY=true`). `SEED_ON_START=true` força re-seed destrutivo.
 
-| Variável | Descrição |
-|----------|-----------|
-| `API_PORT` / `WEB_PORT` | Portas expostas no host |
-| `NEXT_PUBLIC_API_URL` | URL da API **vista pelo navegador** (padrão `http://localhost:4000`) |
-| `CSV_HOST_PATH` | Pasta local dos CSVs montada no container |
-| `SEED_IF_EMPTY` | `true` (padrão) — seed na primeira subida se o banco estiver vazio |
-| `SEED_ON_START` | `true` força seed a cada subida (destrutivo) |
-| `GEMINI_API_KEY` | Chat com Gemini (opcional) |
+### Localmente (desenvolvimento)
 
-Arquivos Docker: [`docker-compose.yml`](docker-compose.yml), [`docker/Dockerfile.api`](docker/Dockerfile.api), [`docker/Dockerfile.web`](docker/Dockerfile.web).
-
-## Como rodar localmente
-
-### Pré-requisitos
-
-- Node.js 20+
-- CSVs da Byst.end (pasta `Downloads` ou `data/`)
-
-### Instalação
+**Pré-requisitos:** Node.js 20+.
 
 ```bash
 cd bystend-platform
@@ -86,52 +233,79 @@ npm run db:seed
 npm run dev
 ```
 
-- Web: http://localhost:3000
-- API: http://localhost:4000/api/health
-
-### Variáveis de ambiente
+- Web: http://localhost:3000  
+- API: http://localhost:4000/api/health  
 
 | Variável | Descrição |
 |----------|-----------|
 | `DATABASE_URL` | SQLite (`file:./prisma/dev.db`) |
-| `CSV_DATA_DIR` | Pasta com os CSVs exportados |
+| `CSV_DATA_DIR` | Pasta dos CSVs para seed |
 | `API_PORT` | Porta da API (padrão 4000) |
-| `NEXT_PUBLIC_API_URL` | URL da API para o frontend |
-| `GEMINI_API_KEY` | Chave do Google Gemini para o chat com RAG |
-| `OPENAI_API_KEY` | Reservado para uso futuro |
+| `NEXT_PUBLIC_API_URL` | URL da API para o browser |
+| `GEMINI_API_KEY` | Chat com Gemini + RAG |
+| `GEMINI_MODEL` | Modelo preferido (ex.: `gemini-2.5-flash`) |
 
-## Documentação de arquitetura
+---
 
-Documentação técnica detalhada em [`docs/architecture/`](docs/architecture/README.md).
+## API principal (resumo)
 
-Para agentes Cursor neste repositório, a skill **`bystend-architecture-context`** (`.cursor/skills/bystend-architecture-context/`) orienta a leitura ordenada de todos os documentos antes de codar.
+| Método | Rota | Uso |
+|--------|------|-----|
+| GET | `/api/health` | Health check |
+| GET | `/api/contents`, `/api/contents/:id` | Biblioteca |
+| GET | `/api/search` | Busca textual |
+| GET | `/api/learning-paths/:slug` | Trilha |
+| GET | `/api/quiz` | Perguntas |
+| POST | `/api/quiz/answer` | Avaliação + progresso do quiz |
+| GET | `/api/progress/:sessionId` | Progresso da sessão anônima |
+| POST | `/api/progress` | Marcar etapa/camada concluída |
+| POST | `/api/chat` | Chat RAG + Gemini |
+
+---
 
 ## Decisões técnicas
 
-- **Seed estruturado** a partir de 6 CSVs preservando camadas, sensibilidade e risco jurídico
-- **Chat com RAG + Google Gemini** (`gemini-1.5-flash`): recuperação textual no SQLite e resposta baseada exclusivamente no contexto recuperado
-- **Guardrails** por nível de risco jurídico e linguagem não conclusiva
-- **Sessão anônima** via `localStorage` para progresso de quiz
+- **Seed estruturado** a partir de CSVs: camadas, sensibilidade, risco jurídico e `searchText`
+- **RAG textual** no SQLite (sem embeddings no MVP) com limite de contexto para o prompt
+- **Gemini** com fallback de modelos e resposta template se a API falhar
+- **UserProgress** unificado para quiz e trilha (sem autenticação)
+- **Tipos compartilhados** em `@bystend/shared` e `transpilePackages` no Next.js
 
-## Limitações conhecidas
+---
 
-- Busca semântica por embeddings não implementada (busca textual ponderada)
-- Chat não usa LLM externo por padrão
-- Admin de conteúdos não incluído no MVP
-- Progresso da trilha é demonstrativo (não persiste todas as etapas)
+## Limitações conhecidas (MVP)
+
+- Busca **semântica por embeddings** ainda não implementada (ranking textual)
+- Sem painel administrativo de conteúdos
+- Sem autenticação corporativa (sessão 100% anônima por UUID)
+- Chat depende de `GEMINI_API_KEY` para respostas generativas completas
+
+---
 
 ## Próximos passos
 
-- Embeddings para busca semântica
-- Integração OpenAI com prompts e fontes obrigatórias
-- Painel admin para cadastro de conteúdos
-- Trilhas por público (líderes, RH, colaboradores)
-- Modo anônimo reforçado e auditoria de uso
+- **Embeddings** e **busca vetorial** sobre a base educacional
+- **Dashboard administrativo** para curadoria de conteúdos e trilhas
+- **Autenticação corporativa** (SSO) mantendo trilhas por perfil
+- **Analytics educacional** agregado e anônimo (engajamento por camada)
+- **Gamificação segura** (badges, marcos) sem competição tóxica
+- UI dedicada ao **Violentômetro** a partir de `data/violentometro.ts`
+- Integração opcional **OpenAI** com os mesmos guardrails de RAG e fontes
 
-## Apresentação (5–7 min)
+---
 
-1. Problema e proposta Byst.end (1 min)
-2. Demo: Home → Biblioteca → Busca por situação (2 min)
-3. Trilha + Quiz com feedback responsável (1 min)
-4. Chat com fontes e disclaimer (1 min)
-5. Arquitetura, IA responsável e próximos passos (1 min)
+## Roteiro de apresentação (5–7 min)
+
+1. **Problema e proposta Byst.end** — educação preventiva com tom acolhedor (1 min)
+2. **Demo:** Início → Biblioteca → Busca por situação (2 min)
+3. **Trilha + Quiz** — progresso persistido no SQLite (1 min)
+4. **Chat** — fontes, disclaimer e IA responsável (1 min)
+5. **Arquitetura**, persistência anônima e roadmap (1 min)
+
+---
+
+## Licença e uso
+
+Projeto desenvolvido no contexto do **hackathon Byst.end**. Uso educativo; não constitui aconselhamento jurídico ou psicológico.
+
+Para agentes e contribuidores: skill **bystend-architecture-context** em `.cursor/skills/bystend-architecture-context/` e regras em `.cursor/rules/bystend.mdc`.
