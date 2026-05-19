@@ -40,7 +40,7 @@ cp .env.docker.example .env
 docker compose --env-file .env up --build
 ```
 
-Na **primeira** execução, use `SEED_ON_START=true` no `.env` para popular o banco. Nas próximas, defina `SEED_ON_START=false` (o seed é destrutivo).
+Coloque a planilha **`data/VÍDEOS, NANO E MICRO CONTEÚDOS EDUCATIVOS.xlsx`** (ou os CSVs exportados por aba) antes de subir. O seed roda automaticamente na primeira subida com banco vazio (`SEED_IF_EMPTY=true`, padrão). Use `SEED_ON_START=true` apenas para forçar um novo seed (apaga e recria tudo).
 
 | Serviço | URL |
 |---------|-----|
@@ -62,7 +62,8 @@ npm run docker:logs    # acompanha logs
 | `API_PORT` / `WEB_PORT` | Portas expostas no host |
 | `NEXT_PUBLIC_API_URL` | URL da API **vista pelo navegador** (padrão `http://localhost:4000`) |
 | `CSV_HOST_PATH` | Pasta local dos CSVs montada no container |
-| `SEED_ON_START` | `true` para rodar seed na subida da API |
+| `SEED_IF_EMPTY` | `true` (padrão) — seed na primeira subida se o banco estiver vazio |
+| `SEED_ON_START` | `true` força seed a cada subida (destrutivo) |
 | `GEMINI_API_KEY` | Chat com Gemini (opcional) |
 
 Arquivos Docker: [`docker-compose.yml`](docker-compose.yml), [`docker/Dockerfile.api`](docker/Dockerfile.api), [`docker/Dockerfile.web`](docker/Dockerfile.web).

@@ -1,4 +1,9 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+// Server-side uses API_INTERNAL_URL (Docker service name) to avoid localhost routing issues.
+// Client-side uses the build-time NEXT_PUBLIC_API_URL (visible to the browser).
+const API_URL =
+  typeof window === "undefined"
+    ? (process.env.API_INTERNAL_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000")
+    : (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000");
 
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}/api${path}`, {

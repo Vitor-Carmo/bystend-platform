@@ -18,6 +18,7 @@ services:
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       SEED_ON_START: ${SEED_ON_START:-false}
+      SEED_IF_EMPTY: ${SEED_IF_EMPTY:-true}
     volumes:
       - bystend-db:/app/data
       - ${CSV_HOST_PATH:-./data}:/app/data/csvs:ro
@@ -32,6 +33,10 @@ services:
     restart: unless-stopped
     ports:
       - "${WEB_PORT:-3000}:3000"
+    environment:
+      # Usado pelo Next.js no servidor (SSR/RSC) para alcançar a API via rede Docker interna.
+      # O browser usa NEXT_PUBLIC_API_URL embutida no bundle.
+      API_INTERNAL_URL: http://bystend-api:4000
     depends_on:
       - api
 

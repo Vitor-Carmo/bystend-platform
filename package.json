@@ -14,7 +14,8 @@
     "postinstall": "prisma generate",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down",
-    "docker:logs": "docker compose logs -f"
+    "docker:logs": "docker compose logs -f",
+    "docker:seed": "docker compose exec api node apps/api/dist/seed/index.js"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",

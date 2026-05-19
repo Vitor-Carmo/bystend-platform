@@ -9,8 +9,16 @@ import { seedSeasonal } from "./seasonal.js";
 import { seedSlogans } from "./slogans.js";
 import { seedLearningPaths } from "./learning-paths.js";
 import { seedQuiz } from "./quiz.js";
+import { hasXlsxData, XLSX_BASENAME } from "./csv.js";
 
 const NANO_MARKER = "VÍDEOS, NANO E MICRO CONTEÚDOS EDUCATIVOS.xlsx - 2.3. NANO CONTEÚDOS.csv";
+
+function dirHasSeedData(dir: string): boolean {
+  if (!fs.existsSync(dir)) return false;
+  if (fs.existsSync(path.join(dir, NANO_MARKER))) return true;
+  if (fs.existsSync(path.join(dir, XLSX_BASENAME))) return true;
+  return hasXlsxData(dir);
+}
 
 export function resolveDataDir(): string {
   const fromEnv = process.env.CSV_DATA_DIR;
@@ -20,11 +28,9 @@ export function resolveDataDir(): string {
   const candidates = [
     path.resolve(process.cwd(), "data"),
     path.resolve(process.cwd(), "../../data"),
-    path.resolve(process.cwd(), "data"),
-    "C:\\Users\\lrzezak\\Downloads",
   ];
   for (const c of candidates) {
-    if (fs.existsSync(path.join(c, NANO_MARKER))) return c;
+    if (dirHasSeedData(c)) return c;
   }
   return path.resolve(process.cwd(), "data");
 }

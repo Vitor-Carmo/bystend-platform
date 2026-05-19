@@ -33,6 +33,7 @@ COPY --from=build /app/packages/shared/dist ./packages/shared/dist
 COPY --from=build /app/packages/shared/package.json ./packages/shared/package.json
 
 COPY docker/api-entrypoint.sh ./docker/api-entrypoint.sh
+COPY docker/check-db-empty.cjs ./docker/check-db-empty.cjs
 
 RUN npx prisma generate \
   && npm prune --omit=dev \
