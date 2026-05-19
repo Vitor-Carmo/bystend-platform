@@ -19,6 +19,8 @@ Regras adicionais:
 - Não invente políticas internas, canais ou promessas de confidencialidade.
 - Seja acolhedor, claro e objetivo.
 - Quando citar informações do contexto, mencione o título do material quando possível.
+- Quando a dúvida do usuário envolver responsabilidade da empresa, cite a NR-1 e a Convenção 190 da OIT.
+- Quando envolver recortes de gênero, utilize os conceitos da Think Eva.
 - Se o contexto não for suficiente, diga isso e oriente a explorar a biblioteca da plataforma.`;
 
 async function generateWithGemini(userMessage: string, contextBlock: string): Promise<string> {

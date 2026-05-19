@@ -1,0 +1,200 @@
+[
+  {
+    "id": "nivel-1",
+    "ordem": 1,
+    "zona": "atencao",
+    "cor": "#5B8DEF",
+    "titulo": "Insinuações e comentários de teor sexual",
+    "descricao": "“Você fica ainda melhor quando usa essa roupa.”",
+    "exemplo": "“Você fica ainda melhor quando usa essa roupa.”",
+    "rotaSaida": "Sinalize desconforto; registre data/local e quem presenciou.",
+    "gravidade": 1
+  },
+  {
+    "id": "nivel-2",
+    "ordem": 2,
+    "zona": "atencao",
+    "cor": "#5B8DEF",
+    "titulo": "Elogios invasivos sobre corpo  / sexualidade",
+    "descricao": "Perguntas sobre vida sexual, aparência íntima.",
+    "exemplo": "Perguntas sobre vida sexual, aparência íntima.",
+    "rotaSaida": "Defina limite (“não comente meu corpo”); anote recorrência.",
+    "gravidade": 2
+  },
+  {
+    "id": "nivel-3",
+    "ordem": 3,
+    "zona": "atencao",
+    "cor": "#5B8DEF",
+    "titulo": "Perguntas pessoais insistentes",
+    "descricao": "“Você namora? Gosta de…?” mesmo após evitar o tema.",
+    "exemplo": "“Você namora? Gosta de…?” mesmo após evitar o tema.",
+    "rotaSaida": "Interrompa a conversa; peça apoio de colega/gestão.",
+    "gravidade": 3
+  },
+  {
+    "id": "nivel-4",
+    "ordem": 4,
+    "zona": "atencao",
+    "cor": "#5B8DEF",
+    "titulo": "Piadas / memes sexualizados direcionados",
+    "descricao": "Enviar figurinhas, vídeos ou “brincadeiras” com você como alvo.",
+    "exemplo": "Enviar figurinhas, vídeos ou “brincadeiras” com você como alvo.",
+    "rotaSaida": "Guarde evidências (prints); peça para parar por escrito.",
+    "gravidade": 4
+  },
+  {
+    "id": "nivel-5",
+    "ordem": 5,
+    "zona": "alerta",
+    "cor": "#E8C547",
+    "titulo": "Convites repetidos",
+    "descricao": "após recusa",
+    "exemplo": "após recusa",
+    "rotaSaida": "Insistência para sair, “só um drink”, mesmo com negativa.",
+    "gravidade": 5
+  },
+  {
+    "id": "nivel-6",
+    "ordem": 6,
+    "zona": "alerta",
+    "cor": "#E8C547",
+    "titulo": "Reitere a recusa; evite ficar a sós; compartilhe com alguém de confiança.",
+    "descricao": "Contato físico “casual” não solicitado",
+    "exemplo": "Contato físico “casual” não solicitado",
+    "rotaSaida": "Mão no ombro/cintura, encostar por trás, “abraço” forçado.",
+    "gravidade": 6
+  },
+  {
+    "id": "nivel-7",
+    "ordem": 7,
+    "zona": "alerta",
+    "cor": "#E8C547",
+    "titulo": "Afaste-se; nomeie o ato; priorize presença de terceiros.",
+    "descricao": "Mensagens fora de horário com teor sexual",
+    "exemplo": "Mensagens fora de horário com teor sexual",
+    "rotaSaida": "DMs à noite, sugestões, “nudes?”,",
+    "gravidade": 7
+  },
+  {
+    "id": "nivel-8",
+    "ordem": 8,
+    "zona": "alerta",
+    "cor": "#E8C547",
+    "titulo": "pressão para responder.",
+    "descricao": "Bloqueie/limite contato; ajuste privacidade; documente.",
+    "exemplo": "Bloqueie/limite contato; ajuste privacidade; documente.",
+    "rotaSaida": "Exposição a conteúdo sexual sem consentimento",
+    "gravidade": 8
+  },
+  {
+    "id": "nivel-9",
+    "ordem": 9,
+    "zona": "cuidado",
+    "cor": "#E8943A",
+    "titulo": "Mostrar pornografia, fotos íntimas, links “para você”.",
+    "descricao": "Interrompa e saia; registre; reporte em canal formal.",
+    "exemplo": "Interrompa e saia; registre; reporte em canal formal.",
+    "rotaSaida": "Sugestões de troca sexual por “favores”",
+    "gravidade": 9
+  },
+  {
+    "id": "nivel-10",
+    "ordem": 10,
+    "zona": "cuidado",
+    "cor": "#E8943A",
+    "titulo": "“Posso te ajudar, você sabe como…” (promoção/nota/escala).",
+    "descricao": "Trate como grave; busque RH/canal interno e suporte jurídico.",
+    "exemplo": "Trate como grave; busque RH/canal interno e suporte jurídico.",
+    "rotaSaida": "Retaliação após",
+    "gravidade": 10
+  },
+  {
+    "id": "nivel-11",
+    "ordem": 11,
+    "zona": "cuidado",
+    "cor": "#E8943A",
+    "titulo": "impor limite",
+    "descricao": "Piora do tratamento, isolamento, boicote depois do “não”.",
+    "exemplo": "Piora do tratamento, isolamento, boicote depois do “não”.",
+    "rotaSaida": "Anote mudanças objetivas; peça feedback/critério por escrito.",
+    "gravidade": 11
+  },
+  {
+    "id": "nivel-12",
+    "ordem": 12,
+    "zona": "cuidado",
+    "cor": "#E8943A",
+    "titulo": "Perseguição no ambiente (stalking)",
+    "descricao": "Aparecer “por acaso”, seguir, vigiar deslocamentos.",
+    "exemplo": "Aparecer “por acaso”, seguir, vigiar deslocamentos.",
+    "rotaSaida": "Aumente segurança; avise rede; busque proteção institucional.",
+    "gravidade": 12
+  },
+  {
+    "id": "nivel-13",
+    "ordem": 13,
+    "zona": "cuidado",
+    "cor": "#E8943A",
+    "titulo": "Ameaças veladas para obter submissão",
+    "descricao": "“Você vai se arrepender” / “Posso acabar com sua carreira”.",
+    "exemplo": "“Você vai se arrepender” / “Posso acabar com sua carreira”.",
+    "rotaSaida": "Não enfrente sozinha(o); guarde provas; procure orientação especializada.",
+    "gravidade": 13
+  },
+  {
+    "id": "nivel-14",
+    "ordem": 14,
+    "zona": "reaja",
+    "cor": "#D64545",
+    "titulo": "Toque íntimo não",
+    "descricao": "Consentido",
+    "exemplo": "Consentido",
+    "rotaSaida": "Aperto em partes íntimas, “passar a mão”, agarrar.",
+    "gravidade": 14
+  },
+  {
+    "id": "nivel-15",
+    "ordem": 15,
+    "zona": "reaja",
+    "cor": "#D64545",
+    "titulo": "Emergência: afaste-se, procure ajuda imediata e registre ocorrência.",
+    "descricao": "Beijo forçado /",
+    "exemplo": "Beijo forçado /",
+    "rotaSaida": "Imobilização",
+    "gravidade": 15
+  },
+  {
+    "id": "nivel-16",
+    "ordem": 16,
+    "zona": "reaja",
+    "cor": "#D64545",
+    "titulo": "Segurar pelo braço, impedir saída, tentar beijar à força.",
+    "descricao": "Busque local público/seguro; chame apoio; acione segurança/polícia.",
+    "exemplo": "Busque local público/seguro; chame apoio; acione segurança/polícia.",
+    "rotaSaida": "Coerção sexual por medo / ameaça",
+    "gravidade": 16
+  },
+  {
+    "id": "nivel-17",
+    "ordem": 17,
+    "zona": "reaja",
+    "cor": "#D64545",
+    "titulo": "Pressão com chantagem, ameaça a familiares/rotina.",
+    "descricao": "Risco alto: priorize proteção; procure apoio jurídico e rede.",
+    "exemplo": "Risco alto: priorize proteção; procure apoio jurídico e rede.",
+    "rotaSaida": "Tentativa de forçar",
+    "gravidade": 17
+  },
+  {
+    "id": "nivel-18",
+    "ordem": 18,
+    "zona": "reaja",
+    "cor": "#D64545",
+    "titulo": "ato sexual",
+    "descricao": "Tentar despir, tocar à força, insistir com violência.",
+    "exemplo": "Tentar despir, tocar à força, insistir com violência.",
+    "rotaSaida": "Emergência total: acione 190; busque abrigo e ajuda imediata.",
+    "gravidade": 18
+  }
+]

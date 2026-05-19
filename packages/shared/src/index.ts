@@ -1,4 +1,11 @@
-export type ContentType = "video" | "nano" | "micro" | "seasonal" | "slogan" | "theme_bundle";
+export type ContentType =
+  | "video"
+  | "nano"
+  | "micro"
+  | "seasonal"
+  | "slogan"
+  | "theme_bundle"
+  | "reference";
 
 export interface ContentSummary {
   id: string;

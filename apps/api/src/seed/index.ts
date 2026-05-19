@@ -9,6 +9,7 @@ import { seedSeasonal } from "./seasonal.js";
 import { seedSlogans } from "./slogans.js";
 import { seedLearningPaths } from "./learning-paths.js";
 import { seedQuiz } from "./quiz.js";
+import { seedKnowledgeSources } from "./knowledge-sources.js";
 import { hasXlsxData, XLSX_BASENAME } from "./csv.js";
 
 const NANO_MARKER = "VÍDEOS, NANO E MICRO CONTEÚDOS EDUCATIVOS.xlsx - 2.3. NANO CONTEÚDOS.csv";
@@ -20,19 +21,35 @@ function dirHasSeedData(dir: string): boolean {
   return hasXlsxData(dir);
 }
 
-export function resolveDataDir(): string {
-  const fromEnv = process.env.CSV_DATA_DIR;
-  if (fromEnv && path.isAbsolute(fromEnv)) return fromEnv;
-  if (fromEnv) return path.resolve(process.cwd(), fromEnv);
+function isWindowsAbsolutePath(value: string): boolean {
+  return /^[A-Za-z]:[/\\]/.test(value);
+}
 
-  const candidates = [
-    path.resolve(process.cwd(), "data"),
+function dataDirCandidates(): string[] {
+  return [
     path.resolve(process.cwd(), "../../data"),
+    path.resolve(process.cwd(), "data"),
   ];
-  for (const c of candidates) {
-    if (dirHasSeedData(c)) return c;
+}
+
+export function resolveDataDir(): string {
+  const fromEnv = process.env.CSV_DATA_DIR?.trim();
+  if (fromEnv) {
+    if (isWindowsAbsolutePath(fromEnv)) {
+      console.warn(
+        `CSV_DATA_DIR parece um caminho Windows ("${fromEnv}"). Ignorando e usando auto-detecção.`
+      );
+    } else if (path.isAbsolute(fromEnv)) {
+      return fromEnv;
+    } else {
+      return path.resolve(process.cwd(), fromEnv);
+    }
   }
-  return path.resolve(process.cwd(), "data");
+
+  for (const candidate of dataDirCandidates()) {
+    if (dirHasSeedData(candidate)) return candidate;
+  }
+  return path.resolve(process.cwd(), "../../data");
 }
 
 async function main() {
@@ -58,6 +75,7 @@ async function main() {
   await seedSlogans(dataDir);
   await seedLearningPaths();
   await seedQuiz();
+  await seedKnowledgeSources();
 
   const counts = {
     contents: await prisma.content.count(),

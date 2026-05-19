@@ -1,0 +1,40 @@
+# Think Eva — Visão de Mercado (conteúdo curado para RAG)
+# Fonte original: docs/byst-end-materiais/Cópia de Think Eva_Assédio Moral e Sexual.pdf
+# Nota: o PDF é predominantemente visual; este texto resume conceitos e dados públicos da Think Eva.
+
+## Sobre a Think Eva
+Consultoria brasileira de equidade de gênero (desde 2015) que atua com pesquisas, comunicação e cultura organizacional. A linha "Trabalho Sem Assédio" apoia RH e compliance na prevenção e resposta a assédio moral e sexual.
+
+## Pesquisa Trabalho Sem Assédio (referência de mercado)
+- Cerca de 57% das pessoas já viram ou passaram por situações de assédio no trabalho.
+- Metade dos profissionais relatou assédio moral.
+- 1 em cada 6 profissionais pediu demissão após assédio moral.
+- Apenas cerca de 10% das mulheres que sofreram assédio sexual recorreram aos canais de denúncia da empresa.
+
+## Recorte de gênero e interseccionalidade
+- Assédio sexual afeta de forma desproporcional mulheres, especialmente em posições intermediárias (assistentes, analistas pleno/sênior).
+- Mulheres negras e com menor renda tendem a sofrer impactos ampliados em saúde mental, segurança e permanência no emprego.
+- Abordagem inclusiva e sensível ao gênero considera estereótipos, relações de poder e discriminações interseccionais (raça, classe, LGBTQIAPN+, pessoas com deficiência).
+
+## Ciclo do assédio nas empresas (visão Think Eva)
+1. Normalização de piadas, comentários e condutas tóxicas como "brincadeira" ou "jeito da casa".
+2. Silêncio por medo de retaliação, desconfiança nos canais ou culpabilização da vítima.
+3. Escalada de humilhação, isolamento ou pressão até pedido de demissão ou adoecimento.
+4. Custo organizacional: turnover, perda de talentos, reputação e produtividade.
+
+## Conceitos para orientação educativa (não jurídica)
+- Assédio moral: conduta repetida ou sistemática que humilha, isola ou desqualifica no trabalho.
+- Assédio sexual: conduta de natureza sexual não desejada, incluindo comentários, convites, toques e chantagem.
+- Importunação sexual: ato libidinoso sem consentimento (Lei 13.718/2018) — distinto de assédio por não exigir habitualidade.
+- Bystander (espectador ativo): testemunha que registra, apoia a pessoa afetada e aciona canais formais com segurança.
+
+## Papel da liderança e da cultura
+- Lideranças modelam tolerância zero ou permissividade velada.
+- Políticas sem treinamento e canal confiável tendem a baixa adesão de denúncias.
+- Comunicação interna deve evitar revitimização e garantir sigilo processual.
+
+## Recomendações de mercado para empresas
+- Diagnóstico periódico com recorte de gênero e escuta segura.
+- Treinamento por camadas (liderança, RH, equipes) com casos do setor.
+- Canais múltiplos, prazos de resposta e proteção contra retaliação.
+- Métricas de clima e acompanhamento pós-denúncia.

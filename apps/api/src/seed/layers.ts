@@ -11,6 +11,8 @@ const CATEGORIES = [
   { slug: "estupro", name: "Estupro", violence: "ESTUPRO" },
   { slug: "violencia-digital", name: "Violência Digital", violence: "VIOLÊNCIA DIGITAL" },
   { slug: "cultura-respeito", name: "Cultura de Respeito", violence: "GERAL" },
+  { slug: "fontes-oficiais-marco-legal", name: "Fontes Oficiais e Marco Legal", violence: "GERAL" },
+  { slug: "visao-mercado", name: "Visão de Mercado", violence: "GERAL" },
 ];
 
 export async function seedLayersAndCategories() {
@@ -47,6 +49,10 @@ export async function getLayerId(layerNumber: number | null) {
 
 export async function getCategoryId(violenceType: string) {
   const slug = categorySlugFromViolence(violenceType);
+  return getCategoryIdBySlug(slug);
+}
+
+export async function getCategoryIdBySlug(slug: string) {
   const cat = await prisma.category.findUnique({ where: { slug } });
   return cat?.id ?? null;
 }

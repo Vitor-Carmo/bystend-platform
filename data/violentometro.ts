@@ -1,0 +1,255 @@
+/**
+ * Escala do Violentômetro Byst.end (assédio sexual no trabalho + microagressões).
+ * Fonte: docs/byst-end-materiais/Cópia de Violentômetro_Violências - Copia.pptx
+ * Zonas: atenção (fria) → alerta → cuidado → reaja (quente/grave).
+ */
+
+export type ViolentometroZona = "atencao" | "alerta" | "cuidado" | "reaja";
+
+export interface ViolentometroNivel {
+  id: string;
+  ordem: number;
+  zona: ViolentometroZona;
+  /** Cor sugerida para UI (fria → quente). */
+  cor: string;
+  titulo: string;
+  descricao: string;
+  exemplo: string;
+  rotaSaida: string;
+  /** 1 = microagressão leve; 20 = violência física/sexual grave. */
+  gravidade: number;
+}
+
+export const VIOLENTOMETRO_ZONAS: Record<
+  ViolentometroZona,
+  { label: string; cor: string; gravidadeMin: number; gravidadeMax: number }
+> = {
+  atencao: { label: "Atenção", cor: "#5B8DEF", gravidadeMin: 1, gravidadeMax: 5 },
+  alerta: { label: "Alerta", cor: "#E8C547", gravidadeMin: 6, gravidadeMax: 10 },
+  cuidado: { label: "Cuidado", cor: "#E8943A", gravidadeMin: 11, gravidadeMax: 15 },
+  reaja: { label: "Reaja", cor: "#D64545", gravidadeMin: 16, gravidadeMax: 20 },
+};
+
+/** Escala unificada: microagressões → condutas sexuais → violência física/sexual grave. */
+export const VIOLENTOMETRO_NIVEIS: ViolentometroNivel[] = [
+  {
+    id: "nivel-01",
+    ordem: 1,
+    zona: "atencao",
+    cor: VIOLENTOMETRO_ZONAS.atencao.cor,
+    titulo: "Interrupções e cortes frequentes",
+    descricao: "Falar por cima ou não deixar concluir frases em reuniões.",
+    exemplo: "Colega interrompe você sistematicamente para desqualificar sua fala.",
+    rotaSaida: "Peça espaço para concluir; registre o padrão e testemunhas.",
+    gravidade: 1,
+  },
+  {
+    id: "nivel-02",
+    ordem: 2,
+    zona: "atencao",
+    cor: VIOLENTOMETRO_ZONAS.atencao.cor,
+    titulo: "Elogio “com veneno”",
+    descricao: "Elogios que reforçam estereótipo ou hierarquia (“articulado(a) para quem é…”).",
+    exemplo: "Comentário aparentemente positivo que ridiculariza sua identidade.",
+    rotaSaida: "Nomeie o impacto; busque aliado(a) para apoiar na hora.",
+    gravidade: 2,
+  },
+  {
+    id: "nivel-03",
+    ordem: 3,
+    zona: "atencao",
+    cor: VIOLENTOMETRO_ZONAS.atencao.cor,
+    titulo: "Brincadeiras sobre sotaque ou aparência",
+    descricao: "Imitar jeito de falar, cabelo, roupas ou trejeitos de forma recorrente.",
+    exemplo: "Piadas sobre como você se veste ou fala em grupos de trabalho.",
+    rotaSaida: "Defina limites; registre recorrência e quem presenciou.",
+    gravidade: 3,
+  },
+  {
+    id: "nivel-04",
+    ordem: 4,
+    zona: "atencao",
+    cor: VIOLENTOMETRO_ZONAS.atencao.cor,
+    titulo: "Suposições e estereótipos",
+    descricao: "Atribuir função inferior ou papel fixo com base em identidade.",
+    exemplo: "“Você deve ser estagiário(a)” ou subestimar sua senioridade.",
+    rotaSaida: "Corrija a suposição; peça reconhecimento formal do seu papel.",
+    gravidade: 4,
+  },
+  {
+    id: "nivel-05",
+    ordem: 5,
+    zona: "atencao",
+    cor: VIOLENTOMETRO_ZONAS.atencao.cor,
+    titulo: "Insinuações e comentários de teor sexual",
+    descricao: "Comentários ambíguos com duplo sentido sobre corpo ou sexualidade.",
+    exemplo: "“Você fica ainda melhor quando usa essa roupa.”",
+    rotaSaida: "Sinalize desconforto; registre data, local e testemunhas.",
+    gravidade: 5,
+  },
+  {
+    id: "nivel-06",
+    ordem: 6,
+    zona: "alerta",
+    cor: VIOLENTOMETRO_ZONAS.alerta.cor,
+    titulo: "Elogios invasivos sobre corpo ou sexualidade",
+    descricao: "Comentários sobre aparência íntima ou vida sexual no ambiente de trabalho.",
+    exemplo: "Perguntas sobre vida sexual ou elogios focados no corpo.",
+    rotaSaida: "Defina limite (“não comente meu corpo”); anote recorrência.",
+    gravidade: 6,
+  },
+  {
+    id: "nivel-07",
+    ordem: 7,
+    zona: "alerta",
+    cor: VIOLENTOMETRO_ZONAS.alerta.cor,
+    titulo: "Perguntas pessoais insistentes",
+    descricao: "Insistência em temas íntimos mesmo após pedido para parar.",
+    exemplo: "“Você namora? Gosta de…?” repetido após evitar o assunto.",
+    rotaSaida: "Interrompa a conversa; peça apoio de colega ou gestão neutra.",
+    gravidade: 7,
+  },
+  {
+    id: "nivel-08",
+    ordem: 8,
+    zona: "alerta",
+    cor: VIOLENTOMETRO_ZONAS.alerta.cor,
+    titulo: "Piadas ou memes sexualizados direcionados",
+    descricao: "Figurinhas, vídeos ou “brincadeiras” com você como alvo.",
+    exemplo: "Conteúdo sexualizado enviado em chat corporativo ou grupo.",
+    rotaSaida: "Guarde evidências (prints); peça para parar por escrito.",
+    gravidade: 8,
+  },
+  {
+    id: "nivel-09",
+    ordem: 9,
+    zona: "alerta",
+    cor: VIOLENTOMETRO_ZONAS.alerta.cor,
+    titulo: "Convites repetidos após recusa",
+    descricao: "Insistência para sair ou encontrar fora do trabalho após um “não”.",
+    exemplo: "“Só um drink” ou convite íntimo reiterado.",
+    rotaSaida: "Reitere a recusa; evite ficar a sós; compartilhe com alguém de confiança.",
+    gravidade: 9,
+  },
+  {
+    id: "nivel-10",
+    ordem: 10,
+    zona: "alerta",
+    cor: VIOLENTOMETRO_ZONAS.alerta.cor,
+    titulo: "Contato físico “casual” não solicitado",
+    descricao: "Toques no ombro, cintura ou abraços forçados no trabalho.",
+    exemplo: "Encostar por trás ou “abraço” sem consentimento.",
+    rotaSaida: "Afaste-se; nomeie o ato; priorize presença de terceiros.",
+    gravidade: 10,
+  },
+  {
+    id: "nivel-11",
+    ordem: 11,
+    zona: "cuidado",
+    cor: VIOLENTOMETRO_ZONAS.cuidado.cor,
+    titulo: "Mensagens fora de horário com teor sexual",
+    descricao: "DMs noturnos, sugestões sexuais ou pressão para responder.",
+    exemplo: "Mensagens com pedido de nudes ou insinuações após o expediente.",
+    rotaSaida: "Bloqueie ou limite contato; ajuste privacidade; documente.",
+    gravidade: 11,
+  },
+  {
+    id: "nivel-12",
+    ordem: 12,
+    zona: "cuidado",
+    cor: VIOLENTOMETRO_ZONAS.cuidado.cor,
+    titulo: "Exposição a conteúdo sexual sem consentimento",
+    descricao: "Mostrar pornografia, fotos íntimas ou links sexualizados.",
+    exemplo: "Abrir conteúdo explícito na sua frente ou enviar sem pedir.",
+    rotaSaida: "Interrompa e saia; registre; reporte em canal formal.",
+    gravidade: 12,
+  },
+  {
+    id: "nivel-13",
+    ordem: 13,
+    zona: "cuidado",
+    cor: VIOLENTOMETRO_ZONAS.cuidado.cor,
+    titulo: "Troca sexual por favores",
+    descricao: "Sugestão de benefício profissional em troca de ato sexual.",
+    exemplo: "“Posso te ajudar na promoção, você sabe como…”",
+    rotaSaida: "Trate como grave; busque RH, canal interno e suporte jurídico.",
+    gravidade: 13,
+  },
+  {
+    id: "nivel-14",
+    ordem: 14,
+    zona: "cuidado",
+    cor: VIOLENTOMETRO_ZONAS.cuidado.cor,
+    titulo: "Retaliação após impor limite",
+    descricao: "Piora do tratamento, isolamento ou boicote depois de um “não”.",
+    exemplo: "Exclusão de projetos ou mudança de tratamento após recusa.",
+    rotaSaida: "Anote mudanças objetivas; peça critérios por escrito.",
+    gravidade: 14,
+  },
+  {
+    id: "nivel-15",
+    ordem: 15,
+    zona: "cuidado",
+    cor: VIOLENTOMETRO_ZONAS.cuidado.cor,
+    titulo: "Ameaças veladas para obter submissão",
+    descricao: "Intimidação com impacto na carreira ou segurança.",
+    exemplo: "“Você vai se arrepender” ou “Posso acabar com sua carreira”.",
+    rotaSaida: "Não enfrente sozinha(o); guarde provas; procure orientação especializada.",
+    gravidade: 15,
+  },
+  {
+    id: "nivel-16",
+    ordem: 16,
+    zona: "reaja",
+    cor: VIOLENTOMETRO_ZONAS.reaja.cor,
+    titulo: "Toque íntimo sem consentimento",
+    descricao: "Ato físico em partes íntimas ou agarrar sem permissão.",
+    exemplo: "Aperto em partes íntimas ou “passar a mão”.",
+    rotaSaida: "Afaste-se; procure ajuda imediata e registre a ocorrência.",
+    gravidade: 16,
+  },
+  {
+    id: "nivel-17",
+    ordem: 17,
+    zona: "reaja",
+    cor: VIOLENTOMETRO_ZONAS.reaja.cor,
+    titulo: "Beijo forçado ou imobilização",
+    descricao: "Segurar braços, impedir saída ou tentar beijar à força.",
+    exemplo: "Bloqueio físico da passagem ou tentativa de beijo forçado.",
+    rotaSaida: "Busque local público seguro; chame apoio; acione segurança ou 190.",
+    gravidade: 17,
+  },
+  {
+    id: "nivel-18",
+    ordem: 18,
+    zona: "reaja",
+    cor: VIOLENTOMETRO_ZONAS.reaja.cor,
+    titulo: "Coerção sexual por medo ou ameaça",
+    descricao: "Pressão com chantagem, ameaça a familiares ou rotina.",
+    exemplo: "Coerção para ato sexual sob medo de represália.",
+    rotaSaida: "Risco alto: priorize proteção; procure apoio jurídico e rede.",
+    gravidade: 18,
+  },
+  {
+    id: "nivel-19",
+    ordem: 19,
+    zona: "reaja",
+    cor: VIOLENTOMETRO_ZONAS.reaja.cor,
+    titulo: "Tentativa de forçar ato sexual",
+    descricao: "Tentar despir, tocar à força ou insistir com violência.",
+    exemplo: "Tentativa iminente de ato sexual sem consentimento.",
+    rotaSaida: "Emergência: acione 190; busque abrigo e ajuda imediata.",
+    gravidade: 19,
+  },
+  {
+    id: "nivel-20",
+    ordem: 20,
+    zona: "reaja",
+    cor: VIOLENTOMETRO_ZONAS.reaja.cor,
+    titulo: "Violência física ou agressão sexual grave",
+    descricao: "Empurrões, agressões durante coação ou ato sexual imposto.",
+    exemplo: "Violência física associada a assédio ou estupro consumado.",
+    rotaSaida: "Emergência total: 190/192; priorize sobrevivência e atendimento especializado.",
+    gravidade: 20,
+  },
+];
