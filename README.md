@@ -22,6 +22,51 @@ Organizações precisam de uma forma acessível de educar sobre prevenção de a
 - Banco: SQLite + Prisma
 - Monorepo: npm workspaces (`apps/web`, `apps/api`, `packages/shared`)
 
+## Como rodar com Docker
+
+Stack completa (API + Web + SQLite persistente) via Docker Compose.
+
+### Pré-requisitos
+
+- [Docker](https://docs.docker.com/get-docker/) e Docker Compose v2
+- CSVs da Byst.end na pasta `data/` (veja [`data/README.md`](data/README.md))
+
+### Subir os containers
+
+```bash
+cd bystend-platform
+cp .env.docker.example .env
+# Ajuste GEMINI_API_KEY e confira CSV_HOST_PATH=./data com os CSVs dentro de data/
+docker compose --env-file .env up --build
+```
+
+Na **primeira** execução, use `SEED_ON_START=true` no `.env` para popular o banco. Nas próximas, defina `SEED_ON_START=false` (o seed é destrutivo).
+
+| Serviço | URL |
+|---------|-----|
+| Web | http://localhost:3000 |
+| API health | http://localhost:4000/api/health |
+
+### Comandos úteis
+
+```bash
+npm run docker:up      # equivalente a docker compose up --build
+npm run docker:down    # para os containers
+npm run docker:logs    # acompanha logs
+```
+
+### Variáveis Docker (`.env.docker.example`)
+
+| Variável | Descrição |
+|----------|-----------|
+| `API_PORT` / `WEB_PORT` | Portas expostas no host |
+| `NEXT_PUBLIC_API_URL` | URL da API **vista pelo navegador** (padrão `http://localhost:4000`) |
+| `CSV_HOST_PATH` | Pasta local dos CSVs montada no container |
+| `SEED_ON_START` | `true` para rodar seed na subida da API |
+| `GEMINI_API_KEY` | Chat com Gemini (opcional) |
+
+Arquivos Docker: [`docker-compose.yml`](docker-compose.yml), [`docker/Dockerfile.api`](docker/Dockerfile.api), [`docker/Dockerfile.web`](docker/Dockerfile.web).
+
 ## Como rodar localmente
 
 ### Pré-requisitos
@@ -51,12 +96,19 @@ npm run dev
 | `CSV_DATA_DIR` | Pasta com os CSVs exportados |
 | `API_PORT` | Porta da API (padrão 4000) |
 | `NEXT_PUBLIC_API_URL` | URL da API para o frontend |
-| `OPENAI_API_KEY` | Opcional para IA avançada futura |
+| `GEMINI_API_KEY` | Chave do Google Gemini para o chat com RAG |
+| `OPENAI_API_KEY` | Reservado para uso futuro |
+
+## Documentação de arquitetura
+
+Documentação técnica detalhada em [`docs/architecture/`](docs/architecture/README.md).
+
+Para agentes Cursor neste repositório, a skill **`bystend-architecture-context`** (`.cursor/skills/bystend-architecture-context/`) orienta a leitura ordenada de todos os documentos antes de codar.
 
 ## Decisões técnicas
 
 - **Seed estruturado** a partir de 6 CSVs preservando camadas, sensibilidade e risco jurídico
-- **Chat rule-based + RAG textual** no MVP para reduzir alucinação sem depender de API externa
+- **Chat com RAG + Google Gemini** (`gemini-1.5-flash`): recuperação textual no SQLite e resposta baseada exclusivamente no contexto recuperado
 - **Guardrails** por nível de risco jurídico e linguagem não conclusiva
 - **Sessão anônima** via `localStorage` para progresso de quiz
 

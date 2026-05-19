@@ -1,0 +1,44 @@
+# syntax=docker/dockerfile:1
+
+FROM node:20-alpine AS base
+WORKDIR /app
+
+FROM base AS deps
+COPY package.json package-lock.json ./
+COPY apps/api/package.json ./apps/api/
+COPY apps/web/package.json ./apps/web/
+COPY packages/shared/package.json ./packages/shared/
+COPY prisma ./prisma
+RUN npm ci --ignore-scripts
+
+FROM base AS build
+COPY --from=deps /app/node_modules ./node_modules
+COPY package.json package-lock.json tsconfig.base.json ./
+COPY prisma ./prisma
+COPY apps/api ./apps/api
+COPY packages/shared ./packages/shared
+RUN npx prisma generate
+RUN npm run build -w @bystend/shared && npm run build -w @bystend/api
+
+FROM base AS runner
+ENV NODE_ENV=production
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY --from=deps /app/node_modules ./node_modules
+COPY prisma ./prisma
+COPY --from=build /app/apps/api/dist ./apps/api/dist
+COPY --from=build /app/apps/api/package.json ./apps/api/package.json
+COPY --from=build /app/packages/shared/dist ./packages/shared/dist
+COPY --from=build /app/packages/shared/package.json ./packages/shared/package.json
+
+COPY docker/api-entrypoint.sh ./docker/api-entrypoint.sh
+
+RUN npx prisma generate \
+  && npm prune --omit=dev \
+  && chmod +x ./docker/api-entrypoint.sh
+
+RUN mkdir -p /app/data/csvs
+
+EXPOSE 4000
+ENTRYPOINT ["/app/docker/api-entrypoint.sh"]

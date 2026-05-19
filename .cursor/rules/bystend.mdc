@@ -5,6 +5,16 @@ globs: ["**/*"]
 
 # Byst.end — Rules de Desenvolvimento
 
+## Contexto de arquitetura (início de sessão)
+
+Antes de implementar, refatorar ou responder sobre o sistema:
+
+1. Aplicar a skill **`bystend-architecture-context`** (`.cursor/skills/bystend-architecture-context/SKILL.md`)
+2. Ler com a ferramenta Read, no mínimo: `docs/architecture/llm-context.md` e `docs/architecture/architecture-overview.md`
+3. Para tarefas maiores, ler os demais arquivos em `docs/architecture/` conforme a skill
+
+A documentação completa está em `docs/architecture/` — não assumir estrutura sem ler.
+
 ## Arquitetura
 
 - Monorepo: `apps/web` (UI), `apps/api` (REST), `packages/shared` (tipos)
