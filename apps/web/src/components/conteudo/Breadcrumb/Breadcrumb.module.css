@@ -1,0 +1,18 @@
+.crumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-4);
+}
+
+.crumb a {
+  color: var(--text-secondary);
+}
+
+.current {
+  color: var(--text-primary);
+  font-weight: 500;
+}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Nav } from "@/components/Nav";
+import { AppShell } from "@/components/layout/AppShell";
+import { inter, jetbrainsMono } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -9,12 +10,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <body>
-        <main className="container">
-          <Nav />
-          {children}
-        </main>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

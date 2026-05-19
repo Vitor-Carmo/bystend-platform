@@ -1,0 +1,21 @@
+.card {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.question {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin-bottom: var(--space-6);
+  line-height: var(--leading-tight);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.nextBtn {
+  margin-top: var(--space-4);
+}

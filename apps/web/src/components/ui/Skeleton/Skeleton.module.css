@@ -1,0 +1,31 @@
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-3) 0%,
+    var(--surface-2) 50%,
+    var(--surface-3) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+.line {
+  height: 1rem;
+  margin-bottom: var(--space-2);
+}
+
+.lineShort {
+  width: 60%;
+}
+
+.card {
+  height: 140px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: var(--surface-3);
+  }
+}

@@ -1,0 +1,22 @@
+.carousel {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--space-2);
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel::-webkit-scrollbar {
+  height: 6px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: var(--radius-pill);
+}
+
+.item {
+  flex: 0 0 min(320px, 85vw);
+  scroll-snap-align: start;
+}

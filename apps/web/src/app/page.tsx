@@ -1,6 +1,12 @@
-import Link from "next/link";
 import { Disclaimer } from "@/components/Disclaimer";
-import { ContentCard } from "@/components/ContentCard";
+import { Hero } from "@/components/home/Hero";
+import { StatsRow } from "@/components/home/StatsRow";
+import { FeatureGrid } from "@/components/home/FeatureGrid";
+import { SeasonalCarousel } from "@/components/home/SeasonalCarousel";
+import { HowItHelps } from "@/components/home/HowItHelps";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { Reveal } from "@/components/ui/Reveal";
+import { ContentCard } from "@/components/biblioteca/ContentCard";
 import { api } from "@/lib/api";
 
 interface ContentItem {
@@ -19,100 +25,61 @@ export default async function HomePage() {
 
   try {
     const seasonalRes = await api<{ items: ContentItem[] }>("/seasonal");
-    seasonal = seasonalRes.items.slice(0, 3);
+    seasonal = seasonalRes.items.slice(0, 6);
     const contentsRes = await api<{ items: ContentItem[] }>("/contents?type=micro&limit=6");
     featured = contentsRes.items;
   } catch {
-    /* API may be offline during build */
+    /* API offline */
   }
 
   return (
     <>
-      <section className="hero" style={{ marginBottom: "2rem" }}>
-        <h1>Byst.end</h1>
-        <p>
-          Educação, prevenção e orientação inicial sobre assédio e condutas inadequadas no ambiente
-          profissional. Aprenda, busque conteúdos e converse com responsabilidade.
-        </p>
-      </section>
-
+      <Hero />
+      <StatsRow />
       <Disclaimer />
 
-      <section style={{ marginBottom: "2.5rem" }}>
-        <h2 style={{ marginBottom: "1rem" }}>Comece por aqui</h2>
-        <div className="grid grid-2">
-          <Link href="/biblioteca" className="card" style={{ textDecoration: "none", color: "inherit" }}>
-            <h3>Biblioteca</h3>
-            <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
-              Vídeos, nano e microconteúdos organizados por tema e camada educacional.
-            </p>
-          </Link>
-          <Link href="/busca" className="card" style={{ textDecoration: "none", color: "inherit" }}>
-            <h3>Busca inteligente</h3>
-            <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
-              Encontre materiais por palavra-chave, tema ou situação prática.
-            </p>
-          </Link>
-          <Link href="/trilha" className="card" style={{ textDecoration: "none", color: "inherit" }}>
-            <h3>Trilha educativa</h3>
-            <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
-              Percorra as 8 camadas do processo evolutivo educacional da Byst.end.
-            </p>
-          </Link>
-          <Link href="/violentometro" className="card" style={{ textDecoration: "none", color: "inherit" }}>
-            <h3>Violentômetro</h3>
-            <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
-              Entenda a escalada da violência no trabalho, do cuidado inicial até situações graves.
-            </p>
-          </Link>
-          <Link href="/chat" className="card" style={{ textDecoration: "none", color: "inherit" }}>
-            <h3>Chat orientativo</h3>
-            <p style={{ color: "var(--muted)", marginTop: "0.5rem" }}>
-              Tire dúvidas hipotéticas com respostas baseadas na base e indicação de fontes.
-            </p>
-          </Link>
-        </div>
+      <section style={{ marginBottom: "var(--space-12)" }}>
+        <SectionHeader eyebrow="Explorar" title="Comece por aqui" subtitle="Escolha um caminho para mergulhar no conteúdo Byst.end." />
+        <FeatureGrid />
       </section>
 
       {seasonal.length > 0 && (
-        <section style={{ marginBottom: "2.5rem" }}>
-          <h2 style={{ marginBottom: "1rem" }}>Em destaque agora</h2>
-          <div className="grid grid-2">
-            {seasonal.map((c) => (
-              <ContentCard
-                key={c.id}
-                id={c.id}
-                title={c.title}
-                type={c.type}
-                summary={c.summary}
-                theme={c.theme}
-                violenceType={c.violenceType}
-              />
-            ))}
-          </div>
-        </section>
+        <Reveal>
+          <section style={{ marginBottom: "var(--space-12)" }}>
+            <SectionHeader title="Em destaque agora" subtitle="Conteúdos sazonais selecionados para o momento." />
+            <SeasonalCarousel items={seasonal} />
+          </section>
+        </Reveal>
       )}
 
       {featured.length > 0 && (
-        <section>
-          <h2 style={{ marginBottom: "1rem" }}>Microconteúdos em destaque</h2>
-          <div className="grid grid-2">
-            {featured.map((c) => (
-              <ContentCard
-                key={c.id}
-                id={c.id}
-                title={c.title}
-                type={c.type}
-                summary={c.summary}
-                theme={c.theme}
-                violenceType={c.violenceType}
-                layerName={c.layer?.name}
-              />
-            ))}
-          </div>
-        </section>
+        <Reveal delay={0.1}>
+          <section style={{ marginBottom: "var(--space-12)" }}>
+            <SectionHeader title="Microconteúdos em destaque" />
+            <div className="grid grid-3">
+              {featured.map((c) => (
+                <ContentCard
+                  key={c.id}
+                  id={c.id}
+                  title={c.title}
+                  type={c.type}
+                  summary={c.summary}
+                  theme={c.theme}
+                  violenceType={c.violenceType}
+                  layerName={c.layer?.name}
+                />
+              ))}
+            </div>
+          </section>
+        </Reveal>
       )}
+
+      <Reveal delay={0.15}>
+        <section>
+          <SectionHeader title="Como a Byst.end ajuda" subtitle="Uma jornada pensada para contextos sensíveis no trabalho." />
+          <HowItHelps />
+        </section>
+      </Reveal>
     </>
   );
 }
-

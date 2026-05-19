@@ -1,0 +1,35 @@
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-1);
+  cursor: pointer;
+  transition: transform var(--dur-fast);
+}
+
+.chip:hover {
+  transform: translateY(-1px);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.active {
+  box-shadow: var(--shadow-md);
+  border-color: currentColor;
+}

@@ -1,0 +1,24 @@
+.header {
+  margin-bottom: var(--space-6);
+}
+
+.eyebrow {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-2);
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  max-width: 52ch;
+}

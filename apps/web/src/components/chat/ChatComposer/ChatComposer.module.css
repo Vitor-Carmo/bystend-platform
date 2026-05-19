@@ -1,0 +1,66 @@
+.composer {
+  position: sticky;
+  bottom: 0;
+  padding: var(--space-4) 0 var(--space-2);
+  background: linear-gradient(transparent, var(--bg) 24%);
+}
+
+.form {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-end;
+  padding: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.textarea {
+  flex: 1;
+  min-height: 48px;
+  max-height: 160px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  resize: none;
+  line-height: var(--leading-relaxed);
+  padding: var(--space-2);
+}
+
+.textarea:focus {
+  outline: none;
+}
+
+.send {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--accent);
+  color: var(--bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.counter {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  text-align: right;
+  margin-top: var(--space-1);
+}

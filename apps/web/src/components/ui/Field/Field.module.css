@@ -1,0 +1,63 @@
+.field {
+  margin-bottom: var(--space-4);
+}
+
+.label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: var(--leading-relaxed);
+}
+
+.searchLarge .input {
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--text-lg);
+  border-radius: var(--radius-lg);
+}
+
+.helper {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  margin-top: var(--space-2);
+}
+
+.error {
+  font-size: var(--text-xs);
+  color: var(--danger);
+  margin-top: var(--space-2);
+}
+
+.hasError .input,
+.hasError .textarea,
+.hasError .select {
+  border-color: var(--danger);
+}

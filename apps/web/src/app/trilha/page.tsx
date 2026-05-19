@@ -2,9 +2,20 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Disclaimer } from "@/components/Disclaimer";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ProgressBar } from "@/components/ui/ProgressBar";
+import { Button } from "@/components/ui/Button";
+import { Toast } from "@/components/ui/Toast";
+import { PathTimeline } from "@/components/trilha/PathTimeline";
+import { XPRing } from "@/components/gamification/XPRing";
+import { LevelBadge } from "@/components/gamification/LevelBadge";
+import { AchievementGrid } from "@/components/gamification/AchievementGrid";
 import { api } from "@/lib/api";
 import { fetchProgress, markContentComplete } from "@/lib/progress";
+import { computeXP, computeLevel, evaluateAchievements } from "@/lib/gamification";
+import styles from "./trilha.module.css";
 
 interface PathItem {
   order: number;
@@ -12,8 +23,7 @@ interface PathItem {
     id: string;
     title: string;
     type: string;
-    theme?: string | null;
-    layer?: { number: number; name: string; slug?: string } | null;
+    layer?: { number: number; name: string } | null;
   };
 }
 
@@ -30,9 +40,11 @@ const PATH_SLUG = "reconhecer-e-agir";
 export default function TrilhaPage() {
   const [path, setPath] = useState<LearningPath | null>(null);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
+  const [quizScore, setQuizScore] = useState(0);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -44,6 +56,7 @@ export default function TrilhaPage() {
       ]);
       setPath(pathData);
       setCompletedIds(new Set(progress.completedIds));
+      setQuizScore(progress.quizScore);
     } catch {
       setPath(null);
       setError("Não foi possível carregar a trilha. Verifique se a API está em execução.");
@@ -63,6 +76,9 @@ export default function TrilhaPage() {
     try {
       const progress = await markContentComplete(contentId, path?.id);
       setCompletedIds(new Set(progress.completedIds));
+      evaluateAchievements({ completedCount: progress.completedIds.length });
+      setToast("Etapa salva no seu progresso.");
+      setTimeout(() => setToast(null), 3000);
     } catch {
       setError("Não foi possível salvar seu progresso. Tente novamente.");
     } finally {
@@ -71,86 +87,71 @@ export default function TrilhaPage() {
   }
 
   const total = path?.items.length ?? 0;
-  const completed =
-    path?.items.filter((item) => completedIds.has(item.content.id)).length ?? 0;
+  const completed = path?.items.filter((item) => completedIds.has(item.content.id)).length ?? 0;
   const pct = total ? Math.round((completed / total) * 100) : 0;
+  const xp = computeXP({ quizScore, quizTotal: 0, completedIds: [...completedIds], completedLayers: [] });
+  const level = computeLevel(xp);
+  const activeIndex = path?.items.findIndex((i) => !completedIds.has(i.content.id)) ?? 0;
 
   if (loading) {
     return (
       <>
-        <h1 style={{ marginBottom: "0.5rem" }}>Trilha educativa</h1>
-        <p style={{ color: "var(--muted)" }}>Carregando sua jornada...</p>
+        <SectionHeader title="Trilha educativa" subtitle="Carregando sua jornada..." />
       </>
     );
   }
 
   return (
     <>
-      <h1 style={{ marginBottom: "0.5rem" }}>Trilha educativa</h1>
-      <p style={{ color: "var(--muted)", marginBottom: "1.5rem" }}>
-        {path?.description ?? "Percorra conteúdos organizados pelas camadas educacionais da Byst.end."}
-      </p>
+      <SectionHeader
+        eyebrow="Jornada"
+        title="Trilha educativa"
+        subtitle={path?.description ?? "Percorra conteúdos organizados pelas camadas educacionais da Byst.end."}
+      />
       <Disclaimer />
 
       {error && (
-        <p style={{ color: "var(--warning)", marginBottom: "1rem" }} role="alert">
+        <p className={styles.error} role="alert">
           {error}
         </p>
       )}
 
       {path ? (
         <>
-          <h2 style={{ marginBottom: "0.5rem" }}>{path.title}</h2>
-          <p style={{ color: "var(--muted)", marginBottom: "0.5rem" }}>
-            {completed} de {total} etapas concluídas · {pct}% da trilha
-          </p>
-          <p className="progress-bar" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
-            <span style={{ width: `${pct}%` }} />
-          </p>
+          <div className={styles.hero}>
+            <XPRing percent={pct} label="trilha" />
+            <div>
+              <h2 className={styles.pathTitle}>{path.title}</h2>
+              <LevelBadge level={level.level} name={level.name} />
+              <p className="text-muted" style={{ marginTop: "var(--space-3)" }}>
+                {completed} de {total} etapas · {pct}% concluído
+              </p>
+              <ProgressBar value={pct} shimmer className={styles.bar} />
+            </div>
+          </div>
 
-          <ol style={{ listStyle: "none", marginTop: "1.5rem" }}>
-            {path.items.map((item, idx) => {
-              const done = completedIds.has(item.content.id);
-              return (
-                <li
-                  key={item.content.id}
-                  className="card"
-                  style={{
-                    marginBottom: "0.75rem",
-                    borderColor: done ? "var(--success)" : undefined,
-                  }}
-                >
-                  <span style={{ color: "var(--muted)", fontSize: "0.85rem" }}>
-                    Etapa {idx + 1}
-                    {item.content.layer ? ` · ${item.content.layer.name}` : ""}
-                    {done ? " · Concluída" : ""}
-                  </span>
-                  <h3 style={{ margin: "0.35rem 0" }}>
-                    <Link href={`/conteudo/${item.content.id}`}>{item.content.title}</Link>
-                  </h3>
-                  <span className="badge">{item.content.type}</span>
-                  <div style={{ marginTop: "0.75rem" }}>
-                    <button
-                      type="button"
-                      className={done ? "btn btn-secondary" : "btn btn-primary"}
-                      disabled={done || savingId === item.content.id}
-                      onClick={() => handleMarkComplete(item.content.id)}
-                    >
-                      {done ? "Concluída" : savingId === item.content.id ? "Salvando..." : "Marcar como concluída"}
-                    </button>
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
+          <PathTimeline
+            items={path.items}
+            completedIds={completedIds}
+            activeIndex={activeIndex < 0 ? total - 1 : activeIndex}
+            savingId={savingId}
+            onMarkComplete={(id) => void handleMarkComplete(id)}
+          />
 
-          <Link href="/quiz" className="btn btn-primary" style={{ marginTop: "1.5rem", display: "inline-flex" }}>
+          <section className={styles.achievements}>
+            <h3 className={styles.achTitle}>Conquistas</h3>
+            <AchievementGrid />
+          </section>
+
+          <Button href="/quiz" iconRight={<ArrowRight size={18} />}>
             Fazer quiz da trilha
-          </Link>
+          </Button>
         </>
       ) : (
         <p>Trilha indisponível. Verifique se a API está rodando.</p>
       )}
+
+      <Toast message={toast} variant="success" />
     </>
   );
 }

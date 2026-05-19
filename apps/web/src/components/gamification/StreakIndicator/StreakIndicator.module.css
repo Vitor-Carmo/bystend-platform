@@ -1,0 +1,13 @@
+.streak {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--warning);
+}
+
+.inactive {
+  color: var(--text-tertiary);
+  font-weight: 500;
+}

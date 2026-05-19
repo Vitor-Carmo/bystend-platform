@@ -1,0 +1,20 @@
+.disclaimer {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  background: var(--accent-muted);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-6);
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--accent);
+  margin-top: 2px;
+}

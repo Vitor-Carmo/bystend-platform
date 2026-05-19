@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Disclaimer } from "@/components/Disclaimer";
+import { Breadcrumb } from "@/components/conteudo/Breadcrumb";
+import { RelatedContents } from "@/components/conteudo/RelatedContents";
+import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
+import { ProgressBar } from "@/components/ui/ProgressBar";
 import { api } from "@/lib/api";
+import { Box } from "@/lib/box";
+import styles from "./conteudo.module.css";
 
 interface NanoCard {
   order: number;
@@ -20,8 +27,14 @@ interface ContentDetail {
   sensitivity?: string | null;
   legalRisk?: string | null;
   layer?: { number: number; name: string } | null;
-  category?: { name: string } | null;
+  category?: { name: string; slug?: string } | null;
   nanoCards: NanoCard[];
+}
+
+function sensitivityPercent(s?: string | null): number {
+  if (!s) return 0;
+  const map: Record<string, number> = { low: 25, medium: 50, high: 75, critical: 100 };
+  return map[s.toLowerCase()] ?? 40;
 }
 
 export default async function ConteudoPage({ params }: { params: Promise<{ id: string }> }) {
@@ -35,52 +48,87 @@ export default async function ConteudoPage({ params }: { params: Promise<{ id: s
 
   if (!content) notFound();
 
+  const sensPct = sensitivityPercent(content.sensitivity);
+
   return (
     <>
-      <Link href="/biblioteca" style={{ fontSize: "0.9rem" }}>
-        ← Voltar à biblioteca
-      </Link>
-      <h1 style={{ margin: "1rem 0 0.5rem" }}>{content.title}</h1>
-      <p style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-        <span className="badge">{content.type}</span>
-        {content.violenceType && <span className="badge">{content.violenceType}</span>}
-        {content.layer && <span className="badge">Camada {content.layer.number}: {content.layer.name}</span>}
-      </p>
+      <Breadcrumb category={content.category?.name} title={content.title} />
+
+      <header className={styles.hero}>
+        <h1 className={styles.title}>{content.title}</h1>
+        <div className={styles.badges}>
+          <Badge>{content.type}</Badge>
+          {content.violenceType && <Badge tone="muted">{content.violenceType}</Badge>}
+          {content.layer && (
+            <Badge tone="muted">
+              Camada {content.layer.number}: {content.layer.name}
+            </Badge>
+          )}
+        </div>
+      </header>
+
       <Disclaimer />
 
-      {content.summary && <p style={{ marginBottom: "1rem" }}>{content.summary}</p>}
+      <Box className={styles.layout}>
+        <main className={styles.main}>
+          {content.summary && <p className={styles.summary}>{content.summary}</p>}
 
-      {content.nanoCards.length > 0 && (
-        <section style={{ marginBottom: "1.5rem" }}>
-          <h2 style={{ marginBottom: "0.75rem" }}>Nano conteúdos</h2>
-          <ol style={{ paddingLeft: "1.25rem" }}>
-            {content.nanoCards.map((n) => (
-              <li key={n.order} style={{ marginBottom: "0.75rem" }}>
-                {n.text}
-              </li>
-            ))}
-          </ol>
-        </section>
-      )}
+          {content.nanoCards.length > 0 && (
+            <section className={styles.nanoSection}>
+              <h2 className={styles.sectionTitle}>Nano conteúdos</h2>
+              <ol className={styles.nanoList}>
+                {content.nanoCards.map((n) => (
+                  <li key={n.order} className={styles.nanoItem}>
+                    <span className={styles.nanoNum}>{n.order}</span>
+                    <p>{n.text}</p>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
 
-      {content.body && (
-        <section className="card" style={{ marginBottom: "1.5rem", whiteSpace: "pre-wrap" }}>
-          <h2 style={{ marginBottom: "0.75rem" }}>Microconteúdo</h2>
-          <p style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>{content.body.slice(0, 8000)}</p>
-        </section>
-      )}
+          {content.body && (
+            <Card variant="surface" className={styles.bodyCard}>
+              <h2 className={styles.sectionTitle}>Microconteúdo</h2>
+              <div className={`prose ${styles.body}`}>{content.body.slice(0, 8000)}</div>
+            </Card>
+          )}
+        </main>
 
-      {content.url && (
-        <a href={content.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-          Abrir vídeo / recurso externo
-        </a>
-      )}
+        <aside className={styles.sidebar}>
+          {content.sensitivity && (
+            <Card padding="md" className={styles.metaCard}>
+              <h3 className={styles.metaTitle}>Sensibilidade do tema</h3>
+              <ProgressBar value={sensPct} showLabel label={content.sensitivity} />
+            </Card>
+          )}
 
-      {(content.sensitivity || content.legalRisk) && (
-        <p style={{ marginTop: "1.5rem", fontSize: "0.85rem", color: "var(--muted)" }}>
-          Sensibilidade: {content.sensitivity ?? "—"} · Risco jurídico: {content.legalRisk ?? "—"}
-        </p>
-      )}
+          {content.url && (
+            <a
+              href={content.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.externalBtn}
+            >
+              Abrir vídeo / recurso externo
+            </a>
+          )}
+
+          {(content.sensitivity || content.legalRisk) && (
+            <p className={styles.metaNote}>
+              Sensibilidade: {content.sensitivity ?? "—"}
+              <br />
+              Risco jurídico: {content.legalRisk ?? "—"}
+            </p>
+          )}
+
+          <Link href="/trilha" className={styles.trilhaLink}>
+            Ver na trilha educativa →
+          </Link>
+        </aside>
+      </Box>
+
+      <RelatedContents categorySlug={content.category?.slug} excludeId={content.id} />
     </>
   );
 }

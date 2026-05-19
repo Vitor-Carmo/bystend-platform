@@ -1,0 +1,29 @@
+.layout {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: 1fr 280px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.thread {
+  display: flex;
+  flex-direction: column;
+  min-height: 480px;
+}
+
+.messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-height: min(56vh, 520px);
+  overflow-y: auto;
+  padding: var(--space-2);
+  margin-bottom: var(--space-4);
+}

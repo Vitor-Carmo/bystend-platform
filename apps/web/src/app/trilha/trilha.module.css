@@ -1,0 +1,43 @@
+.hero {
+  display: flex;
+  gap: var(--space-6);
+  align-items: center;
+  padding: var(--space-6);
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-8);
+}
+
+.pathTitle {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+}
+
+.bar {
+  margin-top: var(--space-4);
+  max-width: 400px;
+}
+
+.error {
+  color: var(--warning);
+  margin-bottom: var(--space-4);
+}
+
+.achievements {
+  margin: var(--space-10) 0 var(--space-6);
+}
+
+.achTitle {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+}

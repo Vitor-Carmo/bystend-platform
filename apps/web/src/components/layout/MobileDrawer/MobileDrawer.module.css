@@ -1,0 +1,46 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-drawer);
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(320px, 85vw);
+  height: 100%;
+  background: var(--surface-1);
+  border-left: 1px solid var(--border-subtle);
+  padding: var(--space-6);
+  z-index: calc(var(--z-drawer) + 1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.close {
+  align-self: flex-end;
+  padding: var(--space-2);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.link {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link:hover,
+.linkActive {
+  background: var(--accent-muted);
+  color: var(--accent);
+  text-decoration: none;
+}

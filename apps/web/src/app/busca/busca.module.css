@@ -1,0 +1,80 @@
+.hero {
+  max-width: 640px;
+  margin: 0 auto var(--space-8);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+}
+
+.inputWrap {
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.searchInput {
+  padding-left: calc(var(--space-4) + 28px) !important;
+}
+
+.searchInput:focus {
+  box-shadow: 0 0 0 3px var(--accent-muted), var(--shadow-glow-accent);
+}
+
+.suggestions {
+  margin-bottom: var(--space-8);
+}
+
+.suggestLabel {
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-2);
+}
+
+.resultsTitle {
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-4);
+}
+
+.results {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.resultLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.resultTitle {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.snippet {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-3);
+}
+
+.mark {
+  background: var(--accent-muted);
+  color: var(--accent);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.relevance {
+  margin-top: var(--space-2);
+}
