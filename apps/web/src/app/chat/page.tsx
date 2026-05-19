@@ -2,14 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import type { ChatSource, ChatResponse } from "@bystend/shared";
 import { Disclaimer } from "@/components/Disclaimer";
 import { api, getSessionId } from "@/lib/api";
-
-interface ChatSource {
-  id: string;
-  title: string;
-  type: string;
-}
 
 interface ChatMsg {
   role: "user" | "assistant";
@@ -37,12 +32,7 @@ export default function ChatPage() {
     setInput("");
     setLoading(true);
     try {
-      const res = await api<{
-        message: string;
-        sources: ChatSource[];
-        disclaimer: string;
-        highRisk: boolean;
-      }>("/chat", {
+      const res = await api<ChatResponse>("/chat", {
         method: "POST",
         body: JSON.stringify({ message: text, sessionId: getSessionId() }),
       });
@@ -90,15 +80,17 @@ export default function ChatPage() {
               </p>
             )}
             {msg.sources && msg.sources.length > 0 && (
-              <div className="sources">
-                <strong>Fontes relacionadas:</strong>
-                <ul>
+              <div className="sources-block">
+                <p className="sources-block-title">
+                  📚 Fontes consultadas na base da Byst.end:
+                </p>
+                <div className="sources-badges">
                   {msg.sources.map((s) => (
-                    <li key={s.id}>
-                      <Link href={`/conteudo/${s.id}`}>{s.title}</Link> ({s.type})
-                    </li>
+                    <Link key={s.id} href={`/conteudo/${s.id}`} className="source-badge">
+                      {s.title}
+                    </Link>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
             {msg.disclaimer && (
