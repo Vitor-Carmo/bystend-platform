@@ -1,0 +1,24 @@
+{
+  "name": "bystend-platform",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w @bystend/api\" \"npm run dev -w @bystend/web\"",
+    "build": "npm run build -w @bystend/shared && npm run build -w @bystend/api && npm run build -w @bystend/web",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "npm run seed -w @bystend/api",
+    "postinstall": "prisma generate"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "prisma": "^6.8.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.8.2"
+  }
+}

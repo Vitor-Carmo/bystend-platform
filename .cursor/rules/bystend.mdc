@@ -1,0 +1,46 @@
+---
+description: Regras de desenvolvimento da plataforma Byst.end
+globs: ["**/*"]
+---
+
+# Byst.end — Rules de Desenvolvimento
+
+## Arquitetura
+
+- Monorepo: `apps/web` (UI), `apps/api` (REST), `packages/shared` (tipos)
+- Camadas na API: routes → services → prisma
+- Sem lógica de negócio em componentes React além de estado de UI
+
+## Componentes e código
+
+- TypeScript strict, evitar `any`
+- Componentes pequenos e reutilizáveis em `apps/web/src/components`
+- Nomeação: PascalCase para componentes, camelCase para funções, kebab-case para rotas
+
+## Endpoints
+
+- Prefixo `/api`
+- Validação com Zod
+- Erros padronizados: `{ error, details? }`
+- Documentar novos endpoints no README
+
+## Conteúdo sensível
+
+- Tom acolhedor, educativo, sem culpabilizar vítimas
+- Nunca afirmar categoricamente "isso é assédio"
+- Preferir: "pode conter sinais de conduta inadequada e merece atenção"
+- Não inventar políticas internas, canais ou promessas de confidencialidade
+- Encaminhar para RH, compliance, jurídico ou canal de denúncia em casos graves
+
+## Chat de IA
+
+- Sempre citar fontes da base (`Content` relacionados)
+- Incluir disclaimer em toda resposta
+- Respeitar `legalRisk` alto/crítico com linguagem mais cautelosa
+- Tratar relatos como hipotéticos/educativos
+
+## Tom de voz da plataforma
+
+- Claro, respeitoso, profissional
+- Sem sensacionalismo, piadas ou gamificação inadequada
+- Slogans e nanos podem ser diretos, mas nunca agressivos

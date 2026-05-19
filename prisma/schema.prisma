@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  slug      String    @unique
+  name      String
+  contents  Content[]
+  slogans   Slogan[]
+  createdAt DateTime  @default(now())
+}
+
+model EducationLayer {
+  id          String    @id @default(cuid())
+  number      Int       @unique
+  slug        String    @unique
+  name        String
+  description String?
+  contents    Content[]
+  quizQuestions QuizQuestion[]
+  createdAt   DateTime  @default(now())
+}
+
+model Content {
+  id              String          @id @default(cuid())
+  externalId      String?
+  type            String
+  title           String
+  summary         String?
+  body            String?
+  url             String?
+  mediaUrl        String?
+  audience        String          @default("GERAL")
+  violenceType    String?
+  theme           String?
+  sensitivity     String?
+  legalRisk       String?
+  layerId         String?
+  layer           EducationLayer? @relation(fields: [layerId], references: [id])
+  categoryId      String?
+  category        Category?       @relation(fields: [categoryId], references: [id])
+  weekSchedule    String?
+  seasonalDate    DateTime?
+  seasonalPeriod  String?
+  searchText      String?
+  metadata        String?
+  nanoCards       NanoCard[]
+  learningPathItems LearningPathItem[]
+  quizQuestions   QuizQuestion[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([type])
+  @@index([violenceType])
+  @@index([theme])
+}
+
+model NanoCard {
+  id        String   @id @default(cuid())
+  contentId String
+  content   Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  order     Int
+  text      String
+  createdAt DateTime @default(now())
+
+  @@index([contentId])
+}
+
+model Slogan {
+  id         String    @id @default(cuid())
+  text       String
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  violenceType String?
+  createdAt  DateTime  @default(now())
+}
+
+model LearningPath {
+  id          String             @id @default(cuid())
+  slug        String             @unique
+  title       String
+  description String?
+  items       LearningPathItem[]
+  createdAt   DateTime           @default(now())
+}
+
+model LearningPathItem {
+  id        String       @id @default(cuid())
+  pathId    String
+  path      LearningPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  contentId String
+  content   Content      @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  order     Int
+
+  @@unique([pathId, contentId])
+}
+
+model QuizQuestion {
+  id            String          @id @default(cuid())
+  question      String
+  options       String
+  correctIndex  Int
+  explanation   String
+  layerId       String?
+  layer         EducationLayer? @relation(fields: [layerId], references: [id])
+  contentId     String?
+  content       Content?        @relation(fields: [contentId], references: [id])
+  violenceType  String?
+  createdAt     DateTime        @default(now())
+}
+
+model UserProgress {
+  id           String   @id @default(cuid())
+  sessionId    String   @unique
+  pathId       String?
+  completedIds String   @default("[]")
+  quizScore    Int      @default(0)
+  quizTotal    Int      @default(0)
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+}
+
+model ChatSession {
+  id        String        @id @default(cuid())
+  sessionId String        @unique
+  messages  ChatMessage[]
+  createdAt DateTime      @default(now())
+}
+
+model ChatMessage {
+  id        String      @id @default(cuid())
+  sessionId String
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  role      String
+  content   String
+  sources   String?
+  createdAt DateTime    @default(now())
+
+  @@index([sessionId])
+}
